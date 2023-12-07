@@ -30,6 +30,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.travelhelper.ui.designsystem.component.PopularityContent
@@ -41,8 +42,11 @@ import com.example.travelhelper.ui.designsystem.theme.TravelHelperTheme
 @Composable
 fun HomeScreen(
     navController: NavController,
-    onSearchClick: () -> Unit
+    onSearchClick: () -> Unit,
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
+    viewModel.loadPopularDestinations("20231101", "20231105")
+    viewModel.loadNearbyDestinations("127.077910", "37.631821", "20000", "ko")
     val scrollState = rememberScrollState()
     TravelHelperTheme {
         Scaffold(
