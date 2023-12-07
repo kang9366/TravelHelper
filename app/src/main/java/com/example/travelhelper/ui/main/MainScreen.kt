@@ -56,7 +56,10 @@ fun Navigation(navController: NavHostController) {
         startDestination = BottomTab.Home.route
     ) {
         composable(BottomTab.Home.route) {
-            HomeScreen(navController) { navController.navigateSearch() }
+            HomeScreen(
+                navController = navController,
+                onSearchClick = { navController.navigateSearch() }
+            )
         }
 
         composable(BottomTab.Profile.route) {
