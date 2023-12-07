@@ -1,9 +1,12 @@
 package com.example.travelhelper.ui.designsystem.component
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -18,9 +21,6 @@ import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +37,9 @@ import com.example.travelhelper.R
 import com.example.travelhelper.ui.designsystem.theme.Orange20
 import com.example.travelhelper.ui.designsystem.theme.TravelHelperTheme
 import com.example.travelhelper.ui.navigation.BottomNavigationItem
+import com.example.travelhelper.ui.navigation.navigateVision
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -48,6 +51,12 @@ fun BottomNavigationBar(
     val currentRoute = navBackStackEntry?.destination?.route
     val selectedTabIndex = items.indexOfFirst { it.route == currentRoute }
 
+    val pickImageLauncher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickVisualMedia()
+    ) {
+        it?.let { navController.navigateVision(URLEncoder.encode(it.toString(), StandardCharsets.UTF_8.toString())) }
+    }
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -55,8 +64,14 @@ fun BottomNavigationBar(
     ) {
         NavigationBar(
             containerColor = Color.Transparent,
+            contentColor = Color.Transparent,
             modifier = Modifier
                 .clip(RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp))
+                .border(
+                    width = 1.dp,
+                    color = Color(0XFFD9D9D9),
+                    shape = RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp)
+                )
                 .background(Color.White)
         ) {
             items.forEachIndexed { index, navigationItem ->
@@ -95,7 +110,7 @@ fun BottomNavigationBar(
         FloatingActionButton(
             shape = CircleShape,
             onClick = {
-
+                pickImageLauncher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
             },
             modifier = Modifier
                 .align(Alignment.Center)
