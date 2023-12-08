@@ -64,6 +64,7 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.ui:ui-graphics")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("androidx.compose.ui:ui-util:1.5.0")
     implementation("androidx.compose.material3:material3")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -90,4 +91,6 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.8.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
 }
