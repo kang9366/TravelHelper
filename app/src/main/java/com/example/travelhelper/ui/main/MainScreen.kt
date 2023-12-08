@@ -3,21 +3,21 @@ package com.example.travelhelper.ui.main
 import android.annotation.SuppressLint
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.navigation.NavController
+import androidx.compose.runtime.getValue
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.travelhelper.ui.bookmark.BookmarkScreen
 import com.example.travelhelper.ui.designsystem.component.BottomNavigationBar
+import com.example.travelhelper.ui.detail.DetailScreen
 import com.example.travelhelper.ui.home.HomeScreen
 import com.example.travelhelper.ui.navigation.BottomTab
 import com.example.travelhelper.ui.navigation.MainRoute
+import com.example.travelhelper.ui.navigation.navigateDetail
 import com.example.travelhelper.ui.navigation.navigateSearch
 import com.example.travelhelper.ui.search.SearchScreen
 import com.example.travelhelper.ui.vision.VisionScreen
@@ -28,25 +28,23 @@ import java.nio.charset.StandardCharsets
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val showBottomBar = remember { mutableStateOf(true) }
-
-    DisposableEffect(navController) {
-        val listener = NavController.OnDestinationChangedListener { _, destination, _ ->
-            showBottomBar.value = destination.route !in listOf(MainRoute.search, MainRoute.vision)
-        }
-        navController.addOnDestinationChangedListener(listener)
-        onDispose {
-            navController.removeOnDestinationChangedListener(listener)
-        }
-    }
-
+    val navBackStackEntry by navController.currentBackStackEntryAsState()
+    val currentRoute = navBackStackEntry?.destination?.route
 
     Scaffold(
-        bottomBar = { if (showBottomBar.value) BottomNavigationBar(navController) },
+        bottomBar = { if (currentRoute?.let { showBottomBar(it) } == true) BottomNavigationBar(navController) },
         content = {
             Navigation(navController)
         }
     )
+}
+
+private fun showBottomBar(currentRoute: String): Boolean {
+    return when(currentRoute) {
+        BottomTab.Home.route -> true
+        BottomTab.Profile.route -> true
+        else -> false
+    }
 }
 
 @Composable
@@ -57,8 +55,8 @@ fun Navigation(navController: NavHostController) {
     ) {
         composable(BottomTab.Home.route) {
             HomeScreen(
-                navController = navController,
-                onSearchClick = { navController.navigateSearch() }
+                onSearchClick = { navController.navigateSearch() },
+                onDetailClick = { navController.navigateDetail(it) }
             )
         }
 
@@ -81,6 +79,18 @@ fun Navigation(navController: NavHostController) {
                 URLDecoder.decode(it, StandardCharsets.UTF_8.toString()),
                 onBackClick = navController::popBackStack
             ) }
+        }
+
+        composable(
+            route = "${MainRoute.detail}/{title}",
+            arguments = listOf(navArgument("title") { type = NavType.StringType })
+        ) {
+            it.arguments!!.getString("title")?.let { title ->
+                DetailScreen (
+                    onBackClick = navController::popBackStack,
+                    title = title
+                )
+            }
         }
     }
 }
