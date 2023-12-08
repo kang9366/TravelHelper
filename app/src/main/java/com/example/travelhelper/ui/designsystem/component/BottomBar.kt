@@ -18,6 +18,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -64,7 +65,6 @@ fun BottomNavigationBar(
     ) {
         NavigationBar(
             containerColor = Color.Transparent,
-            contentColor = Color.Transparent,
             modifier = Modifier
                 .clip(RoundedCornerShape(25.dp, 25.dp, 0.dp, 0.dp))
                 .border(
@@ -77,6 +77,11 @@ fun BottomNavigationBar(
             items.forEachIndexed { index, navigationItem ->
                 val isSelected = index == selectedTabIndex
                 NavigationBarItem(
+                    colors = NavigationBarItemDefaults.colors(
+                        selectedIconColor = MaterialTheme.colorScheme.primary,
+                        unselectedIconColor = Orange20,
+                        indicatorColor = Color.White
+                    ),
                     modifier = Modifier.background(Color.White),
                     selected = isSelected,
                     label = {
@@ -89,7 +94,6 @@ fun BottomNavigationBar(
                         Icon(
                             painter = navigationItem.icon!!,
                             contentDescription = navigationItem.label,
-                            tint = if(isSelected) MaterialTheme.colorScheme.primary else Orange20
                         )
                     },
                     alwaysShowLabel = false,
