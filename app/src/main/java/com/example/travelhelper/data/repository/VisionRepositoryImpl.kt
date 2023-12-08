@@ -4,7 +4,7 @@ import android.content.ContentResolver
 import android.graphics.Bitmap
 import android.graphics.ImageDecoder
 import android.net.Uri
-import android.util.Log
+import com.example.travelhelper.domain.repository.VisionRepository
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.Firebase
 import com.google.firebase.functions.FirebaseFunctions
