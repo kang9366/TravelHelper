@@ -26,14 +26,14 @@ class VisionViewModel
         .filterNotNull()
         .flatMapLatest { uri ->
             flow {
-                val result = visionUseCase(uri) // VisionUseCase 호출
-                emit(result) // 결과 발행
+                val result = visionUseCase(uri)
+                emit(result)
             }
         }
         .stateIn(
             viewModelScope,
             SharingStarted.Lazily,
-            "" // 초기값
+            ""
         )
 
     fun initImageUri(uri: Uri) {
