@@ -1,4 +1,4 @@
-package com.example.travelhelper.data.repository
+package com.example.travelhelper.domain.repository
 
 import android.net.Uri
 
