@@ -36,7 +36,7 @@ fun ImageSlider(
             count = imageList.size,
             state = pagerState,
             modifier = modifier
-                .height(210.dp)
+                .height(230.dp)
                 .fillMaxWidth()
         ) { page ->
             Card(
