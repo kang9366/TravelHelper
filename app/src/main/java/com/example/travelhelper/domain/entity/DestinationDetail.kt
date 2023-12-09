@@ -1,4 +1,4 @@
-package com.example.travelhelper.data.model
+package com.example.travelhelper.domain.entity
 
 data class DestinationDetail(
     val name: String,
