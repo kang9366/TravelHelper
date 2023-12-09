@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties;
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -5,6 +8,9 @@ plugins {
     id("com.google.dagger.hilt.android")
     id("com.google.gms.google-services")
 }
+
+var properties = Properties()
+properties.load(FileInputStream("local.properties"))
 
 android {
     namespace = "com.example.travelhelper"
@@ -21,6 +27,11 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
+
+        buildConfigField("String", "NAVER_CLIENT_ID", properties.getProperty("NAVER_CLIENT_ID"))
+        buildConfigField("String", "NAVER_CLIENT_SECRET", properties.getProperty("NAVER_CLIENT_SECRET"))
+        buildConfigField("String", "TOUR_API_KEY", properties.getProperty("TOUR_API_KEY"))
+        manifestPlaceholders["GOOGLE_API_KEY"] = properties["GOOGLE_API_KEY"] as String
     }
 
     buildTypes {
@@ -40,6 +51,7 @@ android {
         jvmTarget = "17"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -89,7 +101,7 @@ dependencies {
     implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.8.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
     implementation("com.jakewharton.timber:timber:4.7.1")
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
