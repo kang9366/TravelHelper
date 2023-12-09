@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.TravelHelper"
         tools:targetApi="31">
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyD0UAi412fdZHEFhofkz8cYH22WT8mgcTk"/>
         <activity
             android:name=".ui.main.MainActivity"
             android:exported="true"
