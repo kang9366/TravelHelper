@@ -1,42 +1,63 @@
 package com.example.travelhelper.ui.vision
 
 import android.net.Uri
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.travelhelper.domain.usecase.GetDestinationDetailUseCase
+import com.example.travelhelper.domain.usecase.GetImageUseCase
 import com.example.travelhelper.domain.usecase.VisionUseCase
+import com.example.travelhelper.ui.detail.DestinationDetailUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class VisionViewModel
 @Inject constructor(
+    private val getDestinationDetailUseCase: GetDestinationDetailUseCase,
+    private val getImageUseCase: GetImageUseCase,
     private val visionUseCase: VisionUseCase
 ): ViewModel() {
-    private val _imageUri = MutableStateFlow<Uri?>(null)
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val imageAnalysisResult: StateFlow<String> = _imageUri
-        .filterNotNull()
-        .flatMapLatest { uri ->
-            flow {
-                val result = visionUseCase(uri)
-                emit(result)
+    private val _visionUiState = MutableStateFlow<VisionUiState>(VisionUiState.Loading)
+    val visionUiState: StateFlow<VisionUiState> = _visionUiState
+
+    private val _visionDetailUiState = MutableStateFlow<DestinationDetailUiState>(DestinationDetailUiState.Loading)
+    val visionDetailUiState: StateFlow<DestinationDetailUiState> = _visionDetailUiState
+
+    fun fetchVisionResult(imageUri: Uri) {
+        viewModelScope.launch {
+            _visionUiState.value = VisionUiState.Loading
+            try {
+                val response = visionUseCase(imageUri)
+                Log.d("testtsxz", response.toString())
+                if(response.isBlank()) {
+                    _visionUiState.value = VisionUiState.Empty
+                } else {
+                    _visionUiState.value = VisionUiState.VisionResult(response)
+                }
+            } catch (e: Exception) {
+                Timber.d(e.message.toString())
             }
         }
-        .stateIn(
-            viewModelScope,
-            SharingStarted.Lazily,
-            ""
-        )
+    }
 
-    fun initImageUri(uri: Uri) {
-        _imageUri.value = uri
+    fun fetchVisionDetail(query: String) {
+        viewModelScope.launch {
+            _visionDetailUiState.value = DestinationDetailUiState.Loading
+            try {
+                val destinationDetailResponse = getDestinationDetailUseCase(query)
+                val imageResponse = async {
+                    getImageUseCase(query, 5).map { it.imageUrl }
+                }
+                _visionDetailUiState.value = DestinationDetailUiState.DestinationDetails(destinationDetailResponse, imageResponse.await())
+            } catch (e: Exception) {
+                _visionDetailUiState.value = DestinationDetailUiState.Empty
+            }
+        }
     }
 }
