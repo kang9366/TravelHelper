@@ -1,8 +1,8 @@
 package com.example.travelhelper.domain.repository
 
-import com.example.travelhelper.data.model.DestinationImage
-import com.example.travelhelper.data.model.NearbyDestination
-import com.example.travelhelper.data.model.PopularDestination
+import com.example.travelhelper.domain.entity.DestinationImage
+import com.example.travelhelper.domain.entity.NearbyDestination
+import com.example.travelhelper.domain.entity.PopularDestination
 
 interface HomeRepository {
     suspend fun getPopularDestination(startDate: String, endDate: String): List<PopularDestination>

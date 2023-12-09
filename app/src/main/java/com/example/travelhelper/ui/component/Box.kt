@@ -29,8 +29,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.travelhelper.R
-import com.example.travelhelper.data.model.NearbyDestination
-import com.example.travelhelper.data.model.PopularDestination
+import com.example.travelhelper.domain.entity.NearbyDestination
+import com.example.travelhelper.domain.entity.PopularDestination
 import com.example.travelhelper.ui.theme.Gray02
 import com.example.travelhelper.ui.theme.TravelHelperTheme
 

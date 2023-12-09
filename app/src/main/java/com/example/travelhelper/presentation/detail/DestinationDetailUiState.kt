@@ -1,6 +1,6 @@
 package com.example.travelhelper.presentation.detail
 
-import com.example.travelhelper.data.model.DestinationDetail
+import com.example.travelhelper.domain.entity.DestinationDetail
 
 sealed interface DestinationDetailUiState {
     object Loading: DestinationDetailUiState

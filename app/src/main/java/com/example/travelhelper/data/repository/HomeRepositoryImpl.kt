@@ -3,9 +3,9 @@ package com.example.travelhelper.data.repository
 import com.example.travelhelper.data.api.ImageApiService
 import com.example.travelhelper.data.api.TourApiService
 import com.example.travelhelper.data.mapper.toData
-import com.example.travelhelper.data.model.DestinationImage
-import com.example.travelhelper.data.model.NearbyDestination
-import com.example.travelhelper.data.model.PopularDestination
+import com.example.travelhelper.domain.entity.DestinationImage
+import com.example.travelhelper.domain.entity.NearbyDestination
+import com.example.travelhelper.domain.entity.PopularDestination
 import com.example.travelhelper.domain.repository.HomeRepository
 import javax.inject.Inject
 

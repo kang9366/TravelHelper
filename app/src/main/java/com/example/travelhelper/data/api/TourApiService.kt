@@ -1,5 +1,6 @@
 package com.example.travelhelper.data.api
 
+import com.example.travelhelper.BuildConfig
 import com.example.travelhelper.data.api.model.NearbyDestinationItem
 import com.example.travelhelper.data.api.model.PopularDestinationItem
 import com.example.travelhelper.data.api.model.TourApiResponse
@@ -13,7 +14,7 @@ interface TourApiService {
         @Query("MobileOS") os: String = "AND",
         @Query("MobileApp") serviceName: String = "TravelHelper",
         @Query("_type") type: String = "json",
-        @Query("serviceKey") serviceKey: String = "AOUEIox1FTDxjysn7FGh2tBF4T3YJL6oCBus6k4pR2WhGBKO5ucIwiOVeCNdKBz13gL5JZ1IvCIYz3+OlG5wsQ==",
+        @Query("serviceKey") serviceKey: String = BuildConfig.TOUR_API_KEY,
         @Query("startYmd") startDate: String,
         @Query("endYmd") endDate: String
     ): TourApiResponse<PopularDestinationItem>
@@ -23,7 +24,7 @@ interface TourApiService {
         @Query("MobileOS") os: String = "AND",
         @Query("MobileApp") serviceName: String = "TravelHelper",
         @Query("_type") type: String = "json",
-        @Query("serviceKey") serviceKey: String = "AOUEIox1FTDxjysn7FGh2tBF4T3YJL6oCBus6k4pR2WhGBKO5ucIwiOVeCNdKBz13gL5JZ1IvCIYz3+OlG5wsQ==",
+        @Query("serviceKey") serviceKey: String = BuildConfig.TOUR_API_KEY,
         @Query("mapX") x: String,
         @Query("mapY") y: String,
         @Query("radius") radius: String,
@@ -35,7 +36,7 @@ interface TourApiService {
         @Query("MobileOS") os: String = "AND",
         @Query("MobileApp") serviceName: String = "TravelHelper",
         @Query("_type") type: String = "json",
-        @Query("serviceKey") serviceKey: String = "AOUEIox1FTDxjysn7FGh2tBF4T3YJL6oCBus6k4pR2WhGBKO5ucIwiOVeCNdKBz13gL5JZ1IvCIYz3+OlG5wsQ==",
+        @Query("serviceKey") serviceKey: String = BuildConfig.TOUR_API_KEY,
         @Query("keyword") query: String
     ): TourApiResponse<TourDetailItem>
 }

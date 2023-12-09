@@ -1,6 +1,6 @@
 package com.example.travelhelper.presentation.home
 
-import com.example.travelhelper.data.model.PopularDestination
+import com.example.travelhelper.domain.entity.PopularDestination
 
 
 sealed interface PopularDestinationUiState {

@@ -2,7 +2,7 @@ package com.example.travelhelper.data.repository
 
 import com.example.travelhelper.data.api.TourApiService
 import com.example.travelhelper.data.mapper.toData
-import com.example.travelhelper.data.model.DestinationDetail
+import com.example.travelhelper.domain.entity.DestinationDetail
 import com.example.travelhelper.domain.repository.DetailRepository
 
 class DetailRepositoryImpl(

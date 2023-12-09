@@ -1,6 +1,6 @@
 package com.example.travelhelper.domain.usecase
 
-import com.example.travelhelper.data.model.DestinationImage
+import com.example.travelhelper.domain.entity.DestinationImage
 import com.example.travelhelper.domain.repository.HomeRepository
 import javax.inject.Inject
 

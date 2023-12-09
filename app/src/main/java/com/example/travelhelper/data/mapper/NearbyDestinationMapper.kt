@@ -1,7 +1,7 @@
 package com.example.travelhelper.data.mapper
 
 import com.example.travelhelper.data.api.model.NearbyDestinationItem
-import com.example.travelhelper.data.model.NearbyDestination
+import com.example.travelhelper.domain.entity.NearbyDestination
 
 fun NearbyDestinationItem.toData(): NearbyDestination {
     return NearbyDestination(
