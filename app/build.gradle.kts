@@ -55,6 +55,7 @@ android {
 dependencies {
     implementation("com.google.firebase:firebase-bom:29.0.0")
     implementation("com.google.firebase:firebase-ml-vision:24.0.3")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
     implementation("androidx.core:core-ktx:1.9.0")
@@ -93,4 +94,5 @@ dependencies {
     implementation("com.jakewharton.timber:timber:4.7.1")
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+    implementation("com.google.maps.android:maps-compose:2.11.4")
 }
