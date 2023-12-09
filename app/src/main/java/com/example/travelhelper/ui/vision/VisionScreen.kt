@@ -1,18 +1,15 @@
 package com.example.travelhelper.ui.vision
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
-import android.net.Uri
-import android.provider.MediaStore
-import android.util.Log
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -23,19 +20,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.rememberImagePainter
-import com.example.travelhelper.R
+import com.example.travelhelper.ui.designsystem.component.AlertDialog
+import com.example.travelhelper.ui.designsystem.component.Loading
 import com.example.travelhelper.ui.designsystem.component.TopAppBarNavigationType
 import com.example.travelhelper.ui.designsystem.component.TravelHelperTopBar
 import com.example.travelhelper.ui.designsystem.theme.TravelHelperTheme
-import timber.log.Timber
+import com.example.travelhelper.ui.detail.DetailContent
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -44,13 +39,11 @@ fun VisionScreen(
     onBackClick: () -> Unit,
     viewModel: VisionViewModel = hiltViewModel()
 ) {
-    LaunchedEffect(imageUri) {
-        viewModel.initImageUri(imageUri.toUri())
-        Timber.d("init uri")
-    }
+    val visionUiState by viewModel.visionUiState.collectAsState()
 
-    val analysisResult = viewModel.imageAnalysisResult.collectAsState()
-    Timber.d(analysisResult.value)
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchVisionResult(imageUri.toUri())
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -64,28 +57,65 @@ fun VisionScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(15.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .padding(horizontal = 20.dp)
         ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(200.dp)
-                    .padding(horizontal = 15.dp, vertical = 10.dp)
-                    .clip(MaterialTheme.shapes.large)
-            ) {
-//                imageBitmap?.let { bitmap ->
-//                    Image(bitmap = bitmap.asImageBitmap(), contentDescription = "Loaded image")
-//                }
+            Spacer(modifier = Modifier.height(48.dp))
+            when(visionUiState) {
+                is VisionUiState.Loading -> {
+                    Loading(modifier = Modifier.align(Alignment.CenterHorizontally))
+                }
+                is VisionUiState.Empty -> {
+                    AlertDialog(onDismissRequest = onBackClick) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(230.dp)
+                                .padding(horizontal = 10.dp)
+                                .clip(RoundedCornerShape(16.dp))
+                                .background(Color.White),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Spacer(modifier = Modifier.height(85.dp))
+                            Text(
+                                text = "No matching result",
+                            )
+                            Spacer(modifier = Modifier.weight(1f))
+                            Button(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 20.dp)
+                                    .clip(RoundedCornerShape(16.dp)),
+                                onClick = onBackClick
+                            ) {
+                                Text(
+                                    text = "OK",
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
+                            Spacer(modifier = Modifier.height(15.dp))
+                        }
+                    }
+                }
+                is VisionUiState.VisionResult -> {
+                    FetchVisionDetail(
+                        viewModel = viewModel,
+                        destination = (visionUiState as VisionUiState.VisionResult).result,
+                        onBackClick = onBackClick
+                    )
+                }
             }
-            Text(
-                "Search Screen",
-                style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.padding(vertical = 20.dp)
-            )
         }
     }
+}
+
+@Composable
+private fun FetchVisionDetail(viewModel: VisionViewModel, destination: String, onBackClick: () -> Unit) {
+    val destinationDetailUiState by viewModel.visionDetailUiState.collectAsState()
+
+    LaunchedEffect(key1 = Unit) {
+        viewModel.fetchVisionDetail(destination)
+    }
+    DetailContent(uiState = destinationDetailUiState, onBackClick = onBackClick)
 }
 
 @Preview
