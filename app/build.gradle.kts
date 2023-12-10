@@ -31,6 +31,7 @@ android {
         buildConfigField("String", "NAVER_CLIENT_ID", properties.getProperty("NAVER_CLIENT_ID"))
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties.getProperty("NAVER_CLIENT_SECRET"))
         buildConfigField("String", "TOUR_API_KEY", properties.getProperty("TOUR_API_KEY"))
+        buildConfigField("String", "GPT_API_KEY", properties.getProperty("GPT_API_KEY"))
         manifestPlaceholders["GOOGLE_API_KEY"] = properties["GOOGLE_API_KEY"] as String
     }
 
@@ -107,4 +108,5 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
     implementation("com.google.maps.android:maps-compose:2.11.4")
+    implementation("com.aallam.openai:openai-client:3.6.1")
 }
