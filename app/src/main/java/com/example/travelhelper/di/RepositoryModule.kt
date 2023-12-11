@@ -1,6 +1,7 @@
 package com.example.travelhelper.di
 
 import android.content.ContentResolver
+import com.example.travelhelper.data.api.GptApiService
 import com.example.travelhelper.data.api.ImageApiService
 import com.example.travelhelper.data.api.TourApiService
 import com.example.travelhelper.data.repository.DetailRepositoryImpl
@@ -32,7 +33,7 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideDetailRepository(tourApiService: TourApiService): DetailRepository {
-        return DetailRepositoryImpl(tourApiService)
+    fun provideDetailRepository(tourApiService: TourApiService, gptApiService: GptApiService): DetailRepository {
+        return DetailRepositoryImpl(tourApiService, gptApiService)
     }
 }
