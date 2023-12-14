@@ -1,5 +1,7 @@
 package com.example.travelhelper.di
 
+import com.example.travelhelper.data.api.CurrencyApiService
+import com.example.travelhelper.data.api.GptApiService
 import com.example.travelhelper.data.api.ImageApiService
 import com.example.travelhelper.data.api.TourApiService
 import com.squareup.moshi.Moshi
@@ -20,6 +22,8 @@ import javax.inject.Singleton
 internal object ApiModule {
     private const val TOUR_BASE_URL = "https://apis.data.go.kr"
     private const val IMAGE_BASE_URL = "https://openapi.naver.com"
+    private const val GPT_BASE_URL = "https://api.openai.com"
+    private const val CURRENCY_BASE_URL = "https://www.koreaexim.go.kr"
 
     @Provides
     @Singleton
@@ -67,5 +71,31 @@ internal object ApiModule {
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient).build()
             .create(ImageApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGPTApiService(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): GptApiService{
+        return Retrofit.Builder()
+            .baseUrl(IMAGE_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient).build()
+            .create(GptApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCurrencyApiService(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): CurrencyApiService {
+        return Retrofit.Builder()
+            .baseUrl(CURRENCY_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient).build()
+            .create(CurrencyApiService::class.java)
     }
 }
