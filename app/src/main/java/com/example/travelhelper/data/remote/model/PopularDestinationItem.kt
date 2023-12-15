@@ -1,4 +1,4 @@
-package com.example.travelhelper.data.api.model
+package com.example.travelhelper.data.remote.model
 
 data class PopularDestinationItem(
     val baseYmd: String,

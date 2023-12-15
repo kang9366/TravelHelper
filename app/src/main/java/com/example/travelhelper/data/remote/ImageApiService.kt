@@ -1,7 +1,7 @@
-package com.example.travelhelper.data.api
+package com.example.travelhelper.data.remote
 
 import com.example.travelhelper.BuildConfig
-import com.example.travelhelper.data.api.model.ImageResponse
+import com.example.travelhelper.data.remote.model.ImageResponse
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
