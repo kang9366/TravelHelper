@@ -1,10 +1,10 @@
-package com.example.travelhelper.data.api
+package com.example.travelhelper.data.remote
 
 import com.example.travelhelper.BuildConfig
-import com.example.travelhelper.data.api.model.NearbyDestinationItem
-import com.example.travelhelper.data.api.model.PopularDestinationItem
-import com.example.travelhelper.data.api.model.TourApiResponse
-import com.example.travelhelper.data.api.model.TourDetailItem
+import com.example.travelhelper.data.remote.model.NearbyDestinationItem
+import com.example.travelhelper.data.remote.model.PopularDestinationItem
+import com.example.travelhelper.data.remote.model.TourApiResponse
+import com.example.travelhelper.data.remote.model.TourDetailItem
 import retrofit2.http.GET
 import retrofit2.http.Query
 
