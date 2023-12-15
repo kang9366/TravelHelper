@@ -1,9 +1,10 @@
 package com.example.travelhelper.di
 
 import android.content.ContentResolver
-import com.example.travelhelper.data.api.GptApiService
-import com.example.travelhelper.data.api.ImageApiService
-import com.example.travelhelper.data.api.TourApiService
+import com.example.travelhelper.data.remote.CurrencyApiService
+import com.example.travelhelper.data.remote.GptApiService
+import com.example.travelhelper.data.remote.ImageApiService
+import com.example.travelhelper.data.remote.TourApiService
 import com.example.travelhelper.data.repository.DetailRepositoryImpl
 import com.example.travelhelper.domain.repository.HomeRepository
 import com.example.travelhelper.data.repository.HomeRepositoryImpl
@@ -27,8 +28,8 @@ class RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideHomeRepository(tourApiService: TourApiService, imageApiService: ImageApiService): HomeRepository {
-        return HomeRepositoryImpl(tourApiService, imageApiService)
+    fun provideHomeRepository(tourApiService: TourApiService, imageApiService: ImageApiService, currencyApiService: CurrencyApiService): HomeRepository {
+        return HomeRepositoryImpl(tourApiService, imageApiService, currencyApiService)
     }
 
     @Provides
