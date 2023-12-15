@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -26,14 +27,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -56,15 +56,26 @@ fun HomeScreen(
 ) {
     val nearbyDestinationUiState by viewModel.nearbyDestinationUiState.collectAsState()
     val popularDestinationUiState by viewModel.popularDestinationUiState.collectAsState()
+    val currencyUiState by viewModel.currencyUiState.collectAsState()
+
+    val focusManager = LocalFocusManager.current
+    val interactionSource = remember { MutableInteractionSource() }
 
     LaunchedEffect(key1 = Unit) {
-        viewModel.fetchNearbyDestinations("127.739802", "37.889821", "20000", "en")
+        viewModel.fetchNearbyDestinations("127.0775", "37.6317", "20000", "en")
         viewModel.fetchPopularDestinations("20210513", "20210513")
+        viewModel.fetchCurrencyData()
     }
 
     val scrollState = rememberScrollState()
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier
+            .fillMaxSize()
+            .clickable(
+                onClick = { focusManager.clearFocus() },
+                indication = null,
+                interactionSource = interactionSource
+            ),
         topBar = { TravelHelperTopBar(navigationType = TopAppBarNavigationType.HOME) }
     ) {
         Column(
@@ -77,7 +88,7 @@ fun HomeScreen(
             SearchBar(onSearchClick)
             PopularityRanking(popularDestinationUiState)
             NearbyTravelDestination(onDetailClick, nearbyDestinationUiState)
-            ExchangeRate()
+            ExchangeRate(currencyUiState)
             Spacer(modifier = Modifier.height(100.dp))
         }
     }
@@ -87,17 +98,13 @@ fun HomeScreen(
 private fun SearchBar(
     onSearchClick: () -> Unit
 ) {
-    var value by remember {
-        mutableStateOf("")
-    }
+    val shape = RoundedCornerShape(10.dp)
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 20.dp)
-
     ) {
-        val shape = RoundedCornerShape(10.dp)
         Text(
             modifier = Modifier.padding(top = 20.dp),
             text = "Find Your Destination",
@@ -202,7 +209,6 @@ private fun NearbyTravelDestination(
                         Log.d("tsew", uiState.nearbyDestinations.size.toString())
                         Log.d("tsew", uiState.imageList.toString())
                         val imageUrl = if (uiState.imageList[it].isEmpty()) "" else uiState.imageList[it][0]
-
                         NearbyContent(uiState.nearbyDestinations[it], imageUrl, onClick)
                         Spacer(modifier = Modifier.width(20.dp))
                     }
@@ -213,7 +219,7 @@ private fun NearbyTravelDestination(
 }
 
 @Composable
-private fun ExchangeRate() {
+private fun ExchangeRate(currencyUiState: CurrencyUiState) {
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -224,7 +230,7 @@ private fun ExchangeRate() {
             style = MaterialTheme.typography.titleMedium
         )
         Spacer(modifier = Modifier.height(7.dp))
-        CurrencyConverter()
+        CurrencyConverter(currencyUiState)
     }
 }
 
