@@ -32,6 +32,7 @@ android {
         buildConfigField("String", "NAVER_CLIENT_SECRET", properties.getProperty("NAVER_CLIENT_SECRET"))
         buildConfigField("String", "TOUR_API_KEY", properties.getProperty("TOUR_API_KEY"))
         buildConfigField("String", "GPT_API_KEY", properties.getProperty("GPT_API_KEY"))
+        buildConfigField("String", "CURRENCY_API_KEY", properties.getProperty("CURRENCY_API_KEY"))
         manifestPlaceholders["GOOGLE_API_KEY"] = properties["GOOGLE_API_KEY"] as String
     }
 
@@ -66,11 +67,6 @@ android {
 }
 
 dependencies {
-    implementation("com.google.firebase:firebase-bom:29.0.0")
-    implementation("com.google.firebase:firebase-ml-vision:24.0.3")
-    implementation("com.google.android.gms:play-services-maps:18.2.0")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.2")
     implementation("androidx.activity:activity-compose:1.8.1")
@@ -90,23 +86,48 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.0.1")
     implementation("androidx.navigation:navigation-compose:2.7.5")
+
+    implementation("com.google.code.gson:gson:2.10.1")
+    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
+
+    //firebase
+    implementation("com.google.firebase:firebase-bom:29.0.0")
+    implementation("com.google.firebase:firebase-ml-vision:24.0.3")
+    implementation("com.google.firebase:firebase-functions:20.4.0")
+
+    //hilt
+    kapt("com.google.dagger:hilt-android-compiler:2.44")
+    implementation("com.google.dagger:hilt-android:2.48")
+
+    //network image
+    implementation("com.github.skydoves:landscapist-coil:2.2.10")
+    implementation("com.github.skydoves:landscapist-placeholder:2.2.10")
+    implementation("io.coil-kt:coil-compose:1.4.0")
+
+    //network
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.moshi:moshi-kotlin:1.15.0")
-    implementation("com.google.dagger:hilt-android:2.48")
-    implementation("com.github.skydoves:landscapist-coil:2.2.10")
-    implementation("com.github.skydoves:landscapist-placeholder:2.2.10")
-    implementation("com.google.firebase:firebase-functions:20.4.0")
-    implementation("com.google.code.gson:gson:2.10.1")
-    implementation("io.coil-kt:coil-compose:1.4.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.1.0")
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.11.0")
     implementation("com.squareup.okhttp3:okhttp:4.11.0")
+
+    //timber
     implementation("com.jakewharton.timber:timber:4.7.1")
+
+    //pager
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+
+    //google map
     implementation("com.google.maps.android:maps-compose:2.11.4")
-    implementation("com.aallam.openai:openai-client:3.6.1")
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.0.1")
+
+    //room
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
+    kapt("androidx.room:room-compiler:2.6.1")
+    implementation("androidx.room:room-ktx:2.6.1")
+
+    implementation("me.saket.swipe:swipe:1.1.1")
 }
