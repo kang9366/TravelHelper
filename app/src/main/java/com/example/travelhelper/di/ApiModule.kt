@@ -1,9 +1,9 @@
 package com.example.travelhelper.di
 
-import com.example.travelhelper.data.api.CurrencyApiService
-import com.example.travelhelper.data.api.GptApiService
-import com.example.travelhelper.data.api.ImageApiService
-import com.example.travelhelper.data.api.TourApiService
+import com.example.travelhelper.data.remote.CurrencyApiService
+import com.example.travelhelper.data.remote.GptApiService
+import com.example.travelhelper.data.remote.ImageApiService
+import com.example.travelhelper.data.remote.TourApiService
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -27,6 +27,19 @@ internal object ApiModule {
 
     @Provides
     @Singleton
+    fun provideTourApiService(
+        okHttpClient: OkHttpClient,
+        moshi: Moshi
+    ): TourApiService {
+        return Retrofit.Builder()
+            .baseUrl(TOUR_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .client(okHttpClient).build()
+            .create(TourApiService::class.java)
+    }
+
+    @Provides
+    @Singleton
     fun provideMoshi(): Moshi {
         return Moshi.Builder()
             .addLast(KotlinJsonAdapterFactory())
@@ -47,18 +60,7 @@ internal object ApiModule {
             .build()
     }
 
-    @Provides
-    @Singleton
-    fun provideTourApiService(
-        okHttpClient: OkHttpClient,
-        moshi: Moshi
-    ): TourApiService {
-        return Retrofit.Builder()
-            .baseUrl(TOUR_BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create(moshi))
-            .client(okHttpClient).build()
-            .create(TourApiService::class.java)
-    }
+
 
     @Provides
     @Singleton
@@ -80,7 +82,7 @@ internal object ApiModule {
         moshi: Moshi
     ): GptApiService{
         return Retrofit.Builder()
-            .baseUrl(IMAGE_BASE_URL)
+            .baseUrl(GPT_BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .client(okHttpClient).build()
             .create(GptApiService::class.java)
