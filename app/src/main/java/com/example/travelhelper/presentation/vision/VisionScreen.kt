@@ -8,7 +8,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -37,9 +39,11 @@ import com.example.travelhelper.presentation.detail.DetailContent
 fun VisionScreen(
     imageUri: String,
     onBackClick: () -> Unit,
-    viewModel: VisionViewModel = hiltViewModel()
+    viewModel: VisionViewModel = hiltViewModel(),
+    callTel: (String) -> Unit
 ) {
     val visionUiState by viewModel.visionUiState.collectAsState()
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchVisionResult(imageUri.toUri())
@@ -58,6 +62,7 @@ fun VisionScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(horizontal = 20.dp)
+                .verticalScroll(scrollState)
         ) {
             Spacer(modifier = Modifier.height(48.dp))
             when(visionUiState) {
@@ -100,7 +105,8 @@ fun VisionScreen(
                     FetchVisionDetail(
                         viewModel = viewModel,
                         destination = (visionUiState as VisionUiState.VisionResult).result,
-                        onBackClick = onBackClick
+                        onBackClick = onBackClick,
+                        callTel = callTel
                     )
                 }
             }
@@ -109,20 +115,20 @@ fun VisionScreen(
 }
 
 @Composable
-private fun FetchVisionDetail(viewModel: VisionViewModel, destination: String, onBackClick: () -> Unit) {
+private fun FetchVisionDetail(viewModel: VisionViewModel, destination: String, onBackClick: () -> Unit, callTel: (String) -> Unit) {
     val destinationDetailUiState by viewModel.visionDetailUiState.collectAsState()
 
     LaunchedEffect(key1 = Unit) {
         viewModel.fetchVisionDetail(destination)
     }
-    DetailContent(uiState = destinationDetailUiState, onBackClick = onBackClick)
+    DetailContent(uiState = destinationDetailUiState, onBackClick = onBackClick, callTel = { callTel(it) })
 }
 
 @Preview
 @Composable
 private fun test() {
     TravelHelperTheme {
-        VisionScreen("", {})
+//        VisionScreen("", {})
     }
 }
 
