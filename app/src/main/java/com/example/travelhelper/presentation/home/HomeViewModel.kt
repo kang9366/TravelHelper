@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.travelhelper.domain.usecase.GetCurrencyUseCase
 import com.example.travelhelper.domain.usecase.GetImageUseCase
 import com.example.travelhelper.domain.usecase.GetNearbyDestinationUseCase
 import com.example.travelhelper.domain.usecase.GetPopularDestinationUseCase
@@ -22,7 +23,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getPopularDestinationUseCase: GetPopularDestinationUseCase,
     private val getNearbyDestinationUseCase: GetNearbyDestinationUseCase,
-    private val getImageUseCase: GetImageUseCase
+    private val getImageUseCase: GetImageUseCase,
+    private val getCurrencyUseCase: GetCurrencyUseCase
 ): ViewModel() {
     private val _popularDestinationUiState = MutableStateFlow<PopularDestinationUiState>(PopularDestinationUiState.Loading)
     val popularDestinationUiState: StateFlow<PopularDestinationUiState> = _popularDestinationUiState
@@ -30,8 +32,27 @@ class HomeViewModel @Inject constructor(
     private val _nearbyDestinationUiState = MutableStateFlow<NearbyDestinationUiState>(NearbyDestinationUiState.Loading)
     val nearbyDestinationUiState: StateFlow<NearbyDestinationUiState> = _nearbyDestinationUiState
 
+    private val _currencyUiState = MutableStateFlow<CurrencyUiState>(CurrencyUiState.Loading)
+    val currencyUiState: StateFlow<CurrencyUiState> = _currencyUiState
+
     private val _error = MutableLiveData<String>()
     val error: LiveData<String> = _error
+
+    fun fetchCurrencyData() {
+        viewModelScope.launch {
+            _currencyUiState.value = CurrencyUiState.Loading
+            try {
+                val currencyResponse = getCurrencyUseCase()
+                if(currencyResponse.isEmpty()) {
+                    _currencyUiState.value = CurrencyUiState.Empty
+                } else {
+                    _currencyUiState.value = CurrencyUiState.CurrencyData(currencyResponse)
+                }
+            } catch (e: Exception) {
+                Timber.d(e.message.toString())
+            }
+        }
+    }
 
     fun fetchPopularDestinations(startDate: String, endDate: String) {
         viewModelScope.launch {
