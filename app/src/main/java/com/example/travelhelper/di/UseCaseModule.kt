@@ -3,6 +3,7 @@ package com.example.travelhelper.di
 import com.example.travelhelper.domain.repository.DetailRepository
 import com.example.travelhelper.domain.repository.HomeRepository
 import com.example.travelhelper.domain.repository.VisionRepository
+import com.example.travelhelper.domain.usecase.GetCurrencyUseCase
 import com.example.travelhelper.domain.usecase.GetDestinationDetailUseCase
 import com.example.travelhelper.domain.usecase.GetImageUseCase
 import com.example.travelhelper.domain.usecase.GetNearbyDestinationUseCase
@@ -39,5 +40,10 @@ object UseCaseModule {
     @Provides
     fun provideGetDestinationDetailUseCase(detailRepository: DetailRepository): GetDestinationDetailUseCase {
         return GetDestinationDetailUseCase(detailRepository)
+    }
+
+    @Provides
+    fun provideGetCurrencyUseCase(homeRepository: HomeRepository): GetCurrencyUseCase {
+        return GetCurrencyUseCase(homeRepository)
     }
 }
