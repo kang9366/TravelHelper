@@ -1,6 +1,6 @@
 package com.example.travelhelper.data.mapper
 
-import com.example.travelhelper.data.api.model.TourDetailItem
+import com.example.travelhelper.data.remote.model.TourDetailItem
 import com.example.travelhelper.domain.entity.DestinationDetail
 
 fun TourDetailItem.toData(): DestinationDetail {
