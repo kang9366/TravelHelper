@@ -7,6 +7,7 @@ sealed interface DestinationDetailUiState {
     object Empty: DestinationDetailUiState
     data class DestinationDetails(
         val destinationDetail: DestinationDetail,
-        val image: List<String>
+        val image: List<String>,
+        val description: String
     ): DestinationDetailUiState
 }
