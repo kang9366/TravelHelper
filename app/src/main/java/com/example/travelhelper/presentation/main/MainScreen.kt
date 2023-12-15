@@ -26,7 +26,9 @@ import java.nio.charset.StandardCharsets
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    callTel: (String) -> Unit
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = navBackStackEntry?.destination?.route
@@ -34,7 +36,10 @@ fun MainScreen() {
     Scaffold(
         bottomBar = { if (currentRoute?.let { showBottomBar(it) } == true) BottomNavigationBar(navController) },
         content = {
-            Navigation(navController)
+            Navigation(
+                navController,
+                callTel
+            )
         }
     )
 }
@@ -48,7 +53,7 @@ private fun showBottomBar(currentRoute: String): Boolean {
 }
 
 @Composable
-fun Navigation(navController: NavHostController) {
+fun Navigation(navController: NavHostController, callTel: (String) -> Unit) {
     NavHost(
         navController = navController,
         startDestination = BottomTab.Home.route
@@ -61,12 +66,15 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(BottomTab.Profile.route) {
-            BookmarkScreen(navController)
+            BookmarkScreen(
+                navigateToDetail = { navController.navigateDetail(it)  }
+            )
         }
 
         composable(MainRoute.search) {
             SearchScreen(
-                onBackClick = navController::popBackStack
+                onBackClick = navController::popBackStack,
+                navigateToDetailScreen = { navController.navigateDetail(it) }
             )
         }
 
@@ -75,10 +83,13 @@ fun Navigation(navController: NavHostController) {
             arguments = listOf(navArgument("imageUri") { type = NavType.StringType })
         ) { backStackEntry ->
             val imageUri = backStackEntry.arguments?.getString("imageUri")
-            imageUri?.let { VisionScreen(
-                URLDecoder.decode(it, StandardCharsets.UTF_8.toString()),
-                onBackClick = navController::popBackStack
-            ) }
+            imageUri?.let {
+                VisionScreen(
+                    URLDecoder.decode(it, StandardCharsets.UTF_8.toString()),
+                    onBackClick = navController::popBackStack,
+                    callTel = { tel ->  callTel(tel) }
+                )
+            }
         }
 
         composable(
@@ -88,7 +99,8 @@ fun Navigation(navController: NavHostController) {
             it.arguments!!.getString("title")?.let { title ->
                 DetailScreen (
                     onBackClick = navController::popBackStack,
-                    title = title
+                    title = title,
+                    callTel = callTel
                 )
             }
         }
