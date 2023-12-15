@@ -1,7 +1,9 @@
 package com.example.travelhelper.data.repository
 
-import com.example.travelhelper.data.api.ImageApiService
-import com.example.travelhelper.data.api.TourApiService
+import com.example.travelhelper.data.remote.CurrencyApiService
+import com.example.travelhelper.data.remote.ImageApiService
+import com.example.travelhelper.data.remote.TourApiService
+import com.example.travelhelper.data.remote.model.CurrencyResponse
 import com.example.travelhelper.data.mapper.toData
 import com.example.travelhelper.domain.entity.DestinationImage
 import com.example.travelhelper.domain.entity.NearbyDestination
@@ -11,7 +13,8 @@ import javax.inject.Inject
 
 class HomeRepositoryImpl @Inject constructor(
     private val tourApi: TourApiService,
-    private val imageApi: ImageApiService
+    private val imageApi: ImageApiService,
+    private val currencyApi: CurrencyApiService
 ): HomeRepository {
     override suspend fun getPopularDestination(startDate: String, endDate: String): List<PopularDestination> {
         return tourApi.getPopularDestination(startDate = startDate, endDate = endDate)
@@ -35,5 +38,9 @@ class HomeRepositoryImpl @Inject constructor(
         return imageApi.getImage(query = query, count = count).items.map {
             it.toData()
         }
+    }
+
+    override suspend fun getCurrency(): List<CurrencyResponse> {
+        return currencyApi.getCurrency()
     }
 }
